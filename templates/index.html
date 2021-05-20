@@ -1,0 +1,153 @@
+<!doctype html>
+<head>
+<title>Flask CNN Classifier</title>
+<style>
+	.input-file-container {
+	  position: relative;
+	  width: 225px;
+	} 
+	.js .input-file-trigger {
+	  display: block;
+	  padding: 14px 45px;
+	  background: #39D2B4;
+	  color: #fff;
+	  font-size: 1em;
+	  transition: all .4s;
+	  cursor: pointer;
+	}
+	.js .input-file {
+	  position: absolute;
+	  top: 0; left: 0;
+	  width: 225px;
+	  opacity: 0;
+	  padding: 14px 0;
+	  cursor: pointer;
+	}
+	.js .input-file:hover + .input-file-trigger,
+	.js .input-file:focus + .input-file-trigger,
+	.js .input-file-trigger:hover,
+	.js .input-file-trigger:focus {
+	  background: #34495E;
+	  color: #39D2B4;
+	}
+	.submit{	  
+      margin: 10px 10px 10px 10px;
+	  padding: 14px 45px;
+	  background: #39D2B4;
+	  color: #fff;
+	  font-size: 1em;
+	  transition: all .4s;
+	  cursor: pointer;
+	  border: 0px
+	}
+	.submit:hover{
+		background: #34495E;
+	  color: #39D2B4;
+	}
+	.file-return {
+	  margin: 0;
+	}
+	.file-return:not(:empty) {
+	  margin: 1em 0;
+	}
+	.js .file-return {
+	  font-style: italic;
+	  font-size: .9em;
+	  font-weight: bold;
+	}
+	.js .file-return:not(:empty):before {
+	  content: "Selected file: ";
+	  font-style: normal;
+	  font-weight: normal;
+	}
+	.imageview{
+		height: 450px;
+	    width: 450px;
+	    border: solid 5px;
+	    border-color: #39D2B4;
+	    margin: 10px 10px 10px 10px;
+	    border-radius: 15px;
+	    padding: 3px;
+	}
+	body {
+	  font-family: "Open sans", "Segoe UI", "Segoe WP", Helvetica, Arial, sans-serif;
+	  color: #7F8C9A;
+	  background: #FCFDFD;
+	  display: table-cell;
+    vertical-align: middle;
+	}
+	html, body {
+	    height: 100%;
+	}
+
+	html {
+	    display: table;
+	    margin: auto;
+	}
+	h1, h2 {
+	  margin-bottom: 5px;
+	  font-weight: normal;
+	  text-align: center;
+	  color:#aaa;
+	}
+	h2 {
+	  margin: 5px 0 10px 0;
+	  color: #1ABC9C;
+	}
+	form {
+	  width: 225px;
+	  margin: 0 auto;
+	  text-align:center;
+	}
+	h2 + P {
+	  text-align: center;
+	}
+</style>
+</head>
+<body>
+<center>
+<div>
+	<h1>Covid 19 Detection through X-Rays</h1>
+	{% with messages = get_flashed_messages() %}
+	  {% if messages %}
+	  	<h3>Prediction:</h3>
+        <p><strong> Label:</strong> {{ messages[0] }}</p> 
+        <p><strong>Confidence:</strong> {{ messages[1] }}</p>
+        <img class="imageview" src="{{url_for('static', filename= messages[2] )}}" />
+      {% else %}
+      	<h2>Select an Image to upload</h2>
+	  {% endif %}
+	{% endwith %}
+</div>
+
+<form method="post" action="/" enctype="multipart/form-data">
+    
+  <div class="input-file-container">  
+    <input class="input-file" id="my-file" type="file" name="file" required autocomplete="off">
+    <label tabindex="0" for="my-file" class="input-file-trigger">Select an Image</label>
+    
+  </div>
+  <p class="file-return"></p>
+  <input class="submit" type="submit" value="Classify">
+</form>
+</center>
+</body>
+<script>
+	document.querySelector("html").classList.add('js');
+	var fileInput  = document.querySelector( ".input-file" ),  
+	    button     = document.querySelector( ".input-file-trigger" ),
+	    the_return = document.querySelector(".file-return");
+	      
+	button.addEventListener( "keydown", function( event ) {  
+	    if ( event.keyCode == 13 || event.keyCode == 32 ) {  
+	        fileInput.focus();  
+	    }  
+	});
+	button.addEventListener( "click", function( event ) {
+	   fileInput.focus();
+	   return false;
+	});  
+	fileInput.addEventListener( "change", function( event ) {  
+	    the_return.innerHTML = this.value;  
+	});  
+</script>
